@@ -139,7 +139,7 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
     </tr>
 </table>
 <small><br />
-					<p>This table has the <i>fields</i> <b>Personal</b> and <b>Family</b> and each <i>record</i> has the <b>Personal</b> and <b>Family</b> name of one of the explorers. Since each record is related to a person, we will call this the <b>Person</b> table.
+					<p>This table has the <i>fields</i> <b>personal</b> and <b>family</b> and each <i>record</i> has the <b>personal</b> and <b>family</b> name of one of the explorers. Since each record is related to a person, we will call this the <b>Person</b> table.
 
 					</p></small>
 				</section>
@@ -213,7 +213,7 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
     or as:
 
     ~~~
-    select Personal, Family from PERSON;
+    select personal, family from PERSON;
     ~~~
 
     What style do you find easiest to read, and why?
@@ -743,6 +743,11 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
 
 <section>
 <h2>Filtering</h2>
+</section>
+
+<section>
+	<pre><code>select ident from Visited where site='DR-1';</code></pre>
+	<img src="img/sql-filter.svg" />
 </section>
 
 <section data-markdown>
