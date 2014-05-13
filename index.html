@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Databases</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<style>
+.reveal table {
+	border:1px solid black;
+	border-collapse:collapse;
+	margin:0 auto;
+}
+
+.reveal table th,
+.reveal table td {
+	text-align: left;
+	padding: .3em;
+	border:1px solid black;
+}
+		</style>
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Databases</h1>
+					<h3>Using Databases and SQL</h3>
+					<p>
+						<small><a href="http://abigailcabunoc.com">Abigail Cabunoc</a> / <a href="http://twitter.com/abbycabs">@abbycabs</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h3>Follow Along</h3>
+					<ul><li>Detailed notes with examples: <br /><a href="http://software-carpentry.org/v5/novice/sql/index.html">http://software-carpentry.org/v5/novice/sql/index.html</a></li>
+					<li>These slides: <br /><a href="http://acabunoc.github.com/swc-db">http://acabunoc.github.com/swc-db</a></li>
+				</section>
+
+				<section style="text-align:left">
+				<!-- <blockquote> -->
+					<p><b>database</b> (dā'tə-bās') <i>noun</i></p>
+					<ol>
+<li>A collection of data arranged for ease and speed of search and retrieval by a computer</li>
+ <small><a href="http://dictionary.reference.com/browse/database">The American Heritage® Science Dictionary</a></small>
+					</ol>
+
+ <!-- </blockquote> -->
+
+				</section>
+
+				<section>
+				<p>
+				In the late '20s and early '30s,
+William Dyer,
+Frank Pabodie,
+& Valentina Roerich led expeditions to the
+<a href="http://en.wikipedia.org/wiki/Pole_of_inaccessibility">Pole of Inaccessibility</a>
+in the South Pacific,
+and then to Antarctica.
+</p><br /><p>
+Two years ago,
+their expeditions were found in a storage locker at Miskatonic University.
+We have scanned and OCR'd the data,
+and <i><b>we want to store that information
+in a way that will make search and analysis easy.</b></i>
+</p>
+				</section>
+
+
+
+				<section>
+The simplest kind of database stores data in a <b>table</b> containing columns of <b>fields</b> which describe the data and rows of <b>records</b> which contain the data.
+<img src="img/sql-fieldsrecords.svg" />
+				</section>
+
+				<section>
+					<p>
+					To start bringing in data from the Pole of Inaccessibility expedition, we'll put the explorers names in the table.</p><br />
+<b>Person</b>
+<table>
+    <tr>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+<small><br />
+					<p>This table has the <i>fields</i> <b>Personal</b> and <b>Family</b> and each <i>record</i> has the <b>Personal</b> and <b>Family</b> name of one of the explorers. Since each record is related to a person, we will call this the <b>Person</b> table.
+
+					</p></small>
+				</section>
+
+				<section>
+				<h3>SQLite</h3>
+				<p>when we are using a database, we send commands to a <b>database manager</b>: a program that manipulates the database for us</p>
+
+				<pre><code>sqlite3 person.db</code></pre>
+				</section>
+
+				<section>
+					<h3>SQLite Tips & Tricks</h3>
+					<ul style="list-style:none">
+						<li><b>Help</b>: <code>.help</code></li>
+						<li><b>Display</b>:
+						<ul style="list-style:none">
+						<li><code>.headers on</code></li>
+						<li><code>.mode columns</code></li></ul></li>
+						<li><b>Exit</b>: <code>.quit</code></li>
+					</ul>
+				</section>
+
+				<section>
+					<p>Let's write some queries on the <b>Person</b> table</p>
+					<b>Person</b>
+<table>
+    <tr>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### Challenges - SELECT
+
+1.  Write a query that selects only personal names from the `Person` table.
+
+2.  Many people format queries as:
+
+    ~~~
+    SELECT personal, family FROM person;
+    ~~~
+
+    or as:
+
+    ~~~
+    select Personal, Family from PERSON;
+    ~~~
+
+    What style do you find easiest to read, and why?
+					</script>
+				</section>
+
+<section>
+	<h2>Sorting and Duplicates</h2>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Sorting and Duplicates
+
+1.  Write a query that displays the full names of the scientists in the `Person` table, ordered by family name.
+</script>
+</section>
+
+				<section>
+					<h2>Adding data</h2>
+
+					<p>So far, our database only contains <b>Person</b> information from the Pole of Inaccessibility expeditions. We need to bring in more data to do any useful analysis.</p>
+										<b>Person</b>
+<table>
+    <tr>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+				</section>
+
+				<section>
+				<p>We can insert data from each of the readings taken on the expedition</p>
+
+<table>
+    <tr>
+        <th>personal</th>
+        <th>family</th>
+        <th>Quant</th>
+        <th>Reading</th>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+        <td>rad</td>
+        <td>7.8</td>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+        <td>rad</td>
+        <td>9.82</td>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+        <td>sal</td>
+        <td>0.09</td>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+        <td>sal</td>
+        <td>0.13</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+        <td>rad</td>
+        <td>4.35</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+        <td>rad</td>
+        <td>7.22</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+        <td>rad</td>
+        <td>8.41</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+        <td>temp</td>
+        <td>-21.5</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+        <td>temp</td>
+        <td>-18.5</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>rad</td>
+        <td>1.46</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>rad</td>
+        <td>2.19</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>sal</td>
+        <td>0.05</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>sal</td>
+        <td>0.09</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>sal</td>
+        <td>0.1</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>sal</td>
+        <td>0.21</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+        <td>temp</td>
+        <td>-16</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+        <td>rad</td>
+        <td>11.25</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+        <td>sal</td>
+        <td>22.5</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+        <td>sal</td>
+        <td>41.6</td>
+    </tr>
+</table>
+				</section>
+				<section>
+				<p>let's store the survey readings in a <b>separate table</b></p>
+				</section>
+				<section>
+<table>
+<td>
+<b>Person</b>
+<table>
+    <tr>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+</td>
+
+<td>
+
+<b>Survey</b>
+<table>
+  <tr> <th>quant</th> <th>reading</th> </tr>
+  <tr> <td>rad</td> <td>9.82</td> </tr>
+  <tr> <td>sal</td> <td>0.13</td> </tr>
+  <tr> <td>rad</td> <td>7.8</td> </tr>
+  <tr> <td>sal</td> <td>0.09</td> </tr>
+  <tr> <td>rad</td> <td>8.41</td> </tr>
+  <tr> <td>sal</td> <td>0.05</td> </tr>
+  <tr> <td>...</td> <td>...</td> </tr>
+  <tr> <td>rad</td> <td>11.25</td> </tr>
+</table>
+
+</td>
+</table>
+				</section>
+
+				<section>
+<h3>Primary Key</h3>
+<p>To make using our database easier, we can add a <b>key</b> field to our database. A <b>key</b> is a special field in a database where the values in the field can be used to identify records. </p><br /><p>A <b>key</b> where each record is uniquely identified, is called a <b>Primary Key</b>.
+</p>
+				</section>
+
+				<section>
+				<table>
+<td>
+<span style="background:cyan"><b>Person</b></span>: people who took the readings
+<table>
+    <tr>
+        <th bgcolor="cyan">ident</th>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">dyer</td>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">pb</td>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">lake</td>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">roe</td>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">danforth</td>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+
+</td>
+
+<td>
+
+<b>Survey</b>
+<table>
+  <tr> <th>quant</th> <th>reading</th> </tr>
+  <tr> <td>rad</td> <td>9.82</td> </tr>
+  <tr> <td>sal</td> <td>0.13</td> </tr>
+  <tr> <td>rad</td> <td>7.8</td> </tr>
+  <tr> <td>sal</td> <td>0.09</td> </tr>
+  <tr> <td>rad</td> <td>8.41</td> </tr>
+  <tr> <td>sal</td> <td>0.05</td> </tr>
+  <tr> <td>...</td> <td>...</td> </tr>
+
+  <tr> <td>rad</td> <td>11.25</td> </tr>
+</table>
+
+</td>
+</table>
+				</section>
+
+				<section>
+					<h3>Foreign Key</h3>
+
+					<p>A field in one table that uniquely identified a row in <i>another table</i> - this can be used to create a link between two tables</b>
+</p>
+				</section>
+
+				<section>
+				<table>
+<td>
+<span style="background:cyan"><b>Person</b></span>: people who took the readings
+<table>
+    <tr>
+        <th bgcolor="cyan">ident</th>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">dyer</td>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">pb</td>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">lake</td>
+        <td>Anderson</td>
+        <td>Lake</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">roe</td>
+        <td>Valentina</td>
+        <td>Roerich</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">danforth</td>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+
+</td>
+
+<td>
+
+<b>Survey</b>: the actual readings
+<table>
+  <tr> <th bgcolor="cyan">person</th> <th>quant</th> <th>reading</th> </tr>
+  <tr> <td bgcolor="cyan">dyer</td> <td>rad</td> <td>9.82</td> </tr>
+  <tr> <td bgcolor="cyan">dyer</td> <td>sal</td> <td>0.13</td> </tr>
+  <tr> <td bgcolor="cyan">dyer</td> <td>rad</td> <td>7.8</td> </tr>
+  <tr> <td bgcolor="cyan">dyer</td> <td>sal</td> <td>0.09</td> </tr>
+  <tr> <td bgcolor="cyan">pb</td> <td>rad</td> <td>8.41</td> </tr>
+  <tr> <td bgcolor="cyan">lake</td> <td>sal</td> <td>0.05</td> </tr>
+  <tr> <td bgcolor="cyan">...</td> <td>...</td> <td>...</td> </tr>
+  <tr> <td bgcolor="cyan">roe</td> <td>rad</td> <td>11.25</td> </tr>
+</table>
+
+
+</td>
+</table>
+</section>
+
+<section>
+<table>
+<td>
+<span style="background:cyan"><b>Person</b></span>: people who took the readings
+<table>
+    <tr>
+        <th bgcolor="cyan">ident</th>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">dyer</td>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">pb</td>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">...</td>
+        <td>...</td>
+        <td>...</td>
+    </tr>
+
+    <tr>
+        <td bgcolor="cyan">danforth</td>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+
+
+<span style="background:yellow"><b>Visited</b></span>: when readings were taken at specific sites.
+
+<table>
+  <tr> <th bgcolor="yellow">ident</th> <th>site</th> <th>dated</th> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td>DR-1</td> <td>1927-02-08</td> </tr>
+  <tr> <td bgcolor="yellow">622</td> <td>DR-1</td> <td>1927-02-10</td> </tr>
+  <tr> <td bgcolor="yellow">...</td> <td>...</td> <td>...</td> </tr>
+  <tr> <td bgcolor="yellow">844</td> <td>DR-1</td> <td>1932-03-22</td> </tr>
+</table>
+
+
+</td>
+
+<td>
+
+<b>Survey</b>: the actual readings
+<table>
+  <tr> <th bgcolor="yellow">taken</th> <th bgcolor="cyan">person</th> <th>quant</th> <th>reading</th> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td bgcolor="cyan">dyer</td> <td>rad</td> <td>9.82</td> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td bgcolor="cyan">dyer</td> <td>sal</td> <td>0.13</td> </tr>
+  <tr> <td bgcolor="yellow">622</td> <td bgcolor="cyan">dyer</td> <td>rad</td> <td>7.8</td> </tr>
+  <tr> <td bgcolor="yellow">622</td> <td bgcolor="cyan">dyer</td> <td>sal</td> <td>0.09</td> </tr>
+  <tr> <td bgcolor="yellow">734</td> <td bgcolor="cyan">pb</td> <td>rad</td> <td>8.41</td> </tr>
+  <tr> <td bgcolor="yellow">734</td> <td bgcolor="cyan">lake</td> <td>sal</td> <td>0.05</td> </tr>
+  <tr> <td bgcolor="yellow">...</td> <td bgcolor="cyan">...</td> <td>...</td> <td>...</td> </tr>
+
+  <tr> <td bgcolor="yellow">844</td> <td bgcolor="cyan">roe</td> <td>rad</td> <td>11.25</td> </tr>
+</table>
+
+</td>
+</table>
+</section>
+
+<section>
+<table>
+<td>
+<span style="background:cyan"><b>Person</b></span>: people who took the readings
+<table>
+    <tr>
+        <th bgcolor="cyan">ident</th>
+        <th>personal</th>
+        <th>family</th>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">dyer</td>
+        <td>William</td>
+        <td>Dyer</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">pb</td>
+        <td>Frank</td>
+        <td>Pabodie</td>
+    </tr>
+    <tr>
+        <td bgcolor="cyan">...</td>
+        <td>...</td>
+        <td>...</td>
+    </tr>
+
+    <tr>
+        <td bgcolor="cyan">danforth</td>
+        <td>Frank</td>
+        <td>Danforth</td>
+    </tr>
+</table>
+
+
+
+
+<span style="background:yellow"><b>Visited</b></span>: when readings were taken at specific sites.
+
+<table>
+  <tr> <th bgcolor="yellow">ident</th> <th bgcolor="pink">site</th> <th>dated</th> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td bgcolor="pink">DR-1</td> <td>1927-02-08</td> </tr>
+  <tr> <td bgcolor="yellow">622</td> <td bgcolor="pink">DR-1</td> <td>1927-02-10</td> </tr>
+  <tr> <td bgcolor="yellow">...</td> <td bgcolor="pink">...</td> <td>...</td> </tr>
+
+  <tr> <td bgcolor="yellow">844</td> <td bgcolor="pink">DR-1</td> <td>1932-03-22</td> </tr>
+</table>
+
+
+</td>
+
+<td>
+
+<b>Survey</b>: the actual readings
+<table>
+  <tr> <th bgcolor="yellow">taken</th> <th bgcolor="cyan">person</th> <th>quant</th> <th>reading</th> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td bgcolor="cyan">dyer</td> <td>rad</td> <td>9.82</td> </tr>
+  <tr> <td bgcolor="yellow">619</td> <td bgcolor="cyan">dyer</td> <td>sal</td> <td>0.13</td> </tr>
+  <tr> <td bgcolor="yellow">...</td> <td bgcolor="cyan">...</td> <td>...</td> <td>...</td> </tr>
+
+  <tr> <td bgcolor="yellow">844</td> <td bgcolor="cyan">roe</td> <td>rad</td> <td>11.25</td> </tr>
+</table>
+
+
+<span style="background:pink"><b>Site</b></span>: locations where readings were taken.
+
+<table>
+  <tr> <th bgcolor="pink">name</th> <th>lat</th> <th>long</th> </tr>
+  <tr> <td bgcolor="pink">DR-1</td> <td>-49.85</td> <td>-128.57</td> </tr>
+  <tr> <td bgcolor="pink">DR-3</td> <td>-47.15</td> <td>-126.72</td> </tr>
+  <tr> <td bgcolor="pink">MSK-4</td> <td>-48.87</td> <td>-123.4</td> </tr>
+</table>
+
+</td>
+</table>
+</section>
+
+<section>
+	To use the full survey.db database
+	<pre><code>sqlite> .quit</code></pre>
+<pre><code>sqlite3 survey.db</code></pre>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Relational
+
+1.  Write a query that returns the distinct dates in the `Visited` table.
+1.  Write a query that selects distinct quants from the `Survey` table.
+1.  Write a query that returns the site and date from the `Visited` table, ordered by date.
+1.  If we had data for the time each of the visits occured, where would you add it?
+
+</script>
+</section>
+
+
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Filtering
+
+1.  Suppose we want to select all sites that lie more than 30&deg; from the poles.
+    Our first query is:
+
+    ~~~
+    select * from Site where (lat > -60) or (lat < 60);
+    ~~~
+
+    Explain why this is wrong,
+    and rewrite the query so that it is correct.
+
+2.  Normalized salinity readings are supposed to be between 0.0 and 1.0.
+    Write a query that selects all records from `Survey`
+    with salinity values outside this range.
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+3.  The SQL test `*column-name* like *pattern*`
+    is true if the value in the named column
+    matches the pattern given;
+    the character '%' can be used any number of times in the pattern
+    to mean "match zero or more characters".
+
+    <table>
+      <tr> <th>Expression</th> <th>Value</th> </tr>
+      <tr> <td><code>'a' like 'a'</code></td> <td>True</td> </tr>
+      <tr> <td><code>'a' like '%a'</code></td> <td>True</td> </tr>
+      <tr> <td><code>'b' like '%a'</code></td> <td>False</td> </tr>
+      <tr> <td><code>'alpha' like 'a%'</code></td> <td>True</td> </tr>
+      <tr> <td><code>'alpha' like 'a%p%'</code></td> <td>True</td> </tr>
+    </table>
+    The expression `*column-name* not like *pattern*`
+    inverts the test.
+    Using `like`,
+    write a query that finds all the records in `Visited`
+    that *aren't* from sites labelled 'DR-something'.
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Calculations
+
+1.  After further reading,
+    we realize that Valentina Roerich
+    was reporting salinity as percentages.
+    Write a query that returns all of her salinity measurements
+    from the `Survey` table
+    with the values divided by 100.
+
+2.  The `union` operator combines the results of two queries:
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - NULL values
+
+1.  Write a query that sorts the records in `Visited` by date,
+    omitting entries for which the date is not known
+    (i.e., is null).
+
+1.  What do you expect the query:
+
+    ~~~
+    select * from Visited where dated in ('1927-02-08', null);
+    ~~~
+
+    to produce?
+    What does it actually produce?
+
+1.  Some database designers prefer to use
+    a [sentinel value](../../gloss.html#sentinel-value)
+    to mark missing data rather than `null`.
+    For example,
+    they will use the date "0000-00-00" to mark a missing date,
+    or -1.0 to mark a missing salinity or radiation reading
+    (since actual readings cannot be negative).
+    What does this simplify?
+    What burdens or risks does it introduce?
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Aggregations
+
+1.  How many temperature readings did Frank Pabodie record,
+    and what was their average value?
+
+2.  The average of a set of values is the sum of the values
+    divided by the number of values.
+    Does this mean that the `avg` function returns 2.0 or 3.0
+    when given the values 1.0, `null`, and 5.0?
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+3.  We want to calculate the difference between
+    each individual radiation reading
+    and the average of all the radiation readings.
+    We write the query:
+
+    ~~~
+    select reading - avg(reading) from Survey where quant='rad';
+    ~~~
+
+    What does this actually produce, and why?
+
+4.  The function `group_concat(field, separator)`
+    concatenates all the values in a field
+    using the specified separator character
+    (or ',' if the separator isn't specified).
+    Use this to produce a one-line list of scientists' names,
+    such as:
+
+    ~~~
+    William Dyer, Frank Pabodie, Anderson Lake, Valentina Roerich, Frank Danforth
+    ~~~
+
+    Can you find a way to order the list by surname?
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Joins
+
+1.  Write a query that lists all radiation readings from the DR-1 site.
+
+2.  Write a query that lists all sites visited by people named "Frank".
+
+3.  Describe in your own words what the following query produces:
+
+    ~~~
+    select Site.name from Site join Visited
+    on Site.lat<-49.0 and Site.name=Visited.site and Visited.dated>='1932-00-00';
+    ~~~
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+#### Challenges - Create
+
+1.  Write an SQL statement to replace all uses of `null`
+    in `Survey.person`
+    with the string `'unknown'`.
+
+2.  One of our colleagues has sent us a [CSV](../../gloss.html#csv) file
+    containing temperature readings by Robert Olmstead,
+    which is formatted like this:
+
+    ~~~
+    Taken,Temp
+    619,-21.5
+    622,-15.5
+    ~~~
+
+    Write a small Python program that reads this file in
+    and prints out the SQL `insert` statements needed
+    to add these records to the survey database.
+    Note: you will need to add an entry for Olmstead
+    to the `Person` table.
+    If you are testing your program repeatedly,
+    you may want to investigate SQL's `insert or replace` command.
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+3.  SQLite has several administrative commands that aren't part of the SQL standard.
+    One of them is `.dump`,
+    which prints the SQL commands needed to re-create the database.
+    Another is `.load`,
+    which reads a file created by `.dump` and restores the database.
+    A colleague of yours thinks that storing dump files (which are text) in version control
+    is a good way to track and manage changes to the database.
+    What are the pros and cons of this approach?
+    (Hint: records aren't stored in any particular order.)
+</script>
+</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'sky', //Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
