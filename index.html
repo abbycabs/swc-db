@@ -228,8 +228,8 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
 </script>
 </section>
 
+<section><h2>Adding data</h2></section>
 				<section>
-					<h2>Adding data</h2>
 
 					<p>So far, our database only contains <b>Person</b> information from the Pole of Inaccessibility expeditions. We need to bring in more data to do any useful analysis.</p>
 										<b>Person</b>
@@ -268,8 +268,8 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
     <tr>
         <th>personal</th>
         <th>family</th>
-        <th>Quant</th>
-        <th>Reading</th>
+        <th>quant</th>
+        <th>reading</th>
     </tr>
     <tr>
         <td>William</td>
@@ -911,30 +911,7 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
     in `Survey.person`
     with the string `'unknown'`.
 
-2.  One of our colleagues has sent us a [CSV](../../gloss.html#csv) file
-    containing temperature readings by Robert Olmstead,
-    which is formatted like this:
-
-    ~~~
-    Taken,Temp
-    619,-21.5
-    622,-15.5
-    ~~~
-
-    Write a small Python program that reads this file in
-    and prints out the SQL `insert` statements needed
-    to add these records to the survey database.
-    Note: you will need to add an entry for Olmstead
-    to the `Person` table.
-    If you are testing your program repeatedly,
-    you may want to investigate SQL's `insert or replace` command.
-</script>
-</section>
-
-
-<section data-markdown>
-<script type="text/template">
-3.  SQLite has several administrative commands that aren't part of the SQL standard.
+2.  SQLite has several administrative commands that aren't part of the SQL standard.
     One of them is `.dump`,
     which prints the SQL commands needed to re-create the database.
     Another is `.load`,
