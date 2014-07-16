@@ -60,14 +60,17 @@
 				<section>
 					<h1>Databases</h1>
 					<h3>Using Databases and SQL</h3>
-					<p>
-						<small><a href="http://abigailcabunoc.com">Abigail Cabunoc</a> / <a href="http://twitter.com/abbycabs">@abbycabs</a></small>
-					</p>
+                    <p>
+                        <small><a href="http://abigailcabunoc.com">Abigail Cabunoc</a> / <a href="http://twitter.com/abbycabs">@abbycabs</a></small>
+                    </p>
+                    <p>
+                        <small><a href="http://about.me/timtom">Thomas Guignard</a> / <a href="https://twitter.com/timtomch">@timtomch</a></small>
+                    </p>
 				</section>
 
 				<section>
 					<h3>Follow Along</h3>
-					<ul><li>Detailed notes with examples: <br /><a href="http://software-carpentry.org/v5/novice/sql/index.html">http://software-carpentry.org/v5/novice/sql/index.html</a></li>
+					<ul><li>Detailed notes with examples: <br /><a href="http://timtomch.github.io/2014-07-15-toronto/novice/sql/">http://timtomch.github.io/2014-07-15-toronto/novice/sql/</a></li>
 					<li>These slides: <br /><a href="http://acabunoc.github.com/swc-db">http://acabunoc.github.com/swc-db</a></li>
 				</section>
 
@@ -85,19 +88,7 @@
 
 				<section>
 				<p>
-				In the late '20s and early '30s,
-William Dyer,
-Frank Pabodie,
-& Valentina Roerich led expeditions to the
-<a href="http://en.wikipedia.org/wiki/Pole_of_inaccessibility">Pole of Inaccessibility</a>
-in the South Pacific,
-and then to Antarctica.
-</p><br /><p>
-Two years ago,
-their expeditions were found in a storage locker at Miskatonic University.
-We have scanned and OCR'd the data,
-and <i><b>we want to store that information
-in a way that will make search and analysis easy.</b></i>
+For this lesson, we're going to use the library of the <i>SQL Learners Academy</i> as an example. Since the Academy is much more concerned about teaching SQL than proper cataloguing, its library catalogue is quite rudimentary. The catalogue is based on a few tables that are in relation to each other, enough to get the concept of relational databases across, and run some simple quries!
 </p>
 				</section>
 
@@ -110,48 +101,145 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
 
 				<section>
 					<p>
-					To start bringing in data from the Pole of Inaccessibility expedition, we'll put the explorers names in the table.</p><br />
-<b>Person</b>
+					To start bringing in data from the SQL Learners Academy, we'll put the author information in a table.</p><br />
+<p><strong>Authors</strong>: the "authority file", containing information about the Authors of the Works</p>
+<p>
 <table>
-    <tr>
-        <th>personal</th>
-        <th>family</th>
-    </tr>
-    <tr>
-        <td>William</td>
-        <td>Dyer</td>
-    </tr>
-    <tr>
-        <td>Frank</td>
-        <td>Pabodie</td>
-    </tr>
-    <tr>
-        <td>Anderson</td>
-        <td>Lake</td>
-    </tr>
-    <tr>
-        <td>Valentina</td>
-        <td>Roerich</td>
-    </tr>
-    <tr>
-        <td>Frank</td>
-        <td>Danforth</td>
-    </tr>
+  <tr><th>family</th> <th>personal</th></tr>
+  <TR>
+<TD>Kline</TD>
+<TD>Kevin E.</TD>
+</TR>
+  <TR>
+
+<TD>Kline</TD>
+<TD>Daniel</TD>
+</TR>
+  <TR>
+
+<TD>Hunt</TD>
+<TD>Brand</TD>
+</TR>
+  <TR>
+
+<TD>Taylor</TD>
+<TD>Allen G.</TD>
+</TR>
+  <TR>
+
+<TD>McLaughlin</TD>
+<TD>Brett</TD>
+</TR>
 </table>
 <small><br />
-					<p>This table has the <i>fields</i> <b>personal</b> and <b>family</b> and each <i>record</i> has the <b>personal</b> and <b>family</b> name of one of the explorers. Since each record is related to a person, we will call this the <b>Person</b> table.
+					<p>This table has the <i>fields</i> <b>personal</b> and <b>family</b> and each <i>record</i> has the <b>personal</b> and <b>family</b> name of one of the explorers. Since each record is related to an author, we will call this the <b>Author</b> table.
 
 					</p></small>
 				</section>
+
+                <section>
+                <p>We can add more information on the <b>Authors</b> into this table by adding more fields</p><br />
+<p><strong>Authors</strong>: the "authority file", containing information about the Authors of the Works</p>
+<p>
+<table>
+  <tr><th>family</th> <th>personal</th> <th>occupation</th> <th>birth</th> <th>death</th></tr>
+<TR>
+<TD>Kline</TD>
+<TD>Kevin E.</TD>
+<TD bgcolor="red"></TD>
+<TD>1966</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR>
+<TD>Kline</TD>
+<TD>Daniel</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR>
+<TD>Hunt</TD>
+<TD>Brand</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR>
+<TD>Taylor</TD>
+<TD>Allen G.</TD>
+<TD bgcolor="red"></TD>
+<TD>1945</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR>
+<TD>McLaughlin</TD>
+<TD>Brett</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+</table>
+                </section>
+
+
+                <section>
+<h3>Primary Key</h3>
+<p>To make using our database easier, we can add a <b>key</b> field to our database. A <b>key</b> is a special field in a database where the values in the field can be used to identify records. </p><br /><p>A <b>key</b> where each record is uniquely identified, is called a <b>Primary Key</b>.
+</p>
+                </section>
+
+
+                <section>
+<p><strong>Authors</strong>: the "authority file", containing information about the Authors of the Works</p>
+<p>
+<table>
+  <tr><th>author_id</th> <th>family</th> <th>personal</th> <th>occupation</th> <th>birth</th> <th>death</th></tr>
+<TR><TD>1</TD>
+<TD>Kline</TD>
+<TD>Kevin E.</TD>
+<TD bgcolor="red"></TD>
+<TD>1966</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>2</TD>
+<TD>Kline</TD>
+<TD>Daniel</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>3</TD>
+<TD>Hunt</TD>
+<TD>Brand</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>4</TD>
+<TD>Taylor</TD>
+<TD>Allen G.</TD>
+<TD bgcolor="red"></TD>
+<TD>1945</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>5</TD>
+<TD>McLaughlin</TD>
+<TD>Brett</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+</table>
+                </section>
 
 				<section>
 				<h3>SQLite</h3>
 				<p>when we are using a database, we send commands to a <b>database manager</b>: a program that manipulates the database for us</p>
 
-				<pre><code>sqlite3 person.db</code></pre>
+				<pre><code>sqlite3 swclib.db</code></pre>
 
-				<a href="http://acabunoc.github.io/swc-db/db/person.db
-">http://acabunoc.github.io/swc-db/db/person.db</a>
+				<a href="http://timtomch.github.io/2014-07-15-toronto/novice/sql/swclib.db
+">http://timtomch.github.io/2014-07-15-toronto/novice/sql/swclib.db</a>
 
 				</section>
 
@@ -168,33 +256,46 @@ The simplest kind of database stores data in a <b>table</b> containing columns o
 				</section>
 
 				<section>
-					<p>Let's write some queries on the <b>Person</b> table</p>
-					<b>Person</b>
+					<p>Let's write some queries on the <b>Author</b> table</p>
+<p><strong>Authors</strong></p>
+<p>
 <table>
-    <tr>
-        <th>personal</th>
-        <th>family</th>
-    </tr>
-    <tr>
-        <td>William</td>
-        <td>Dyer</td>
-    </tr>
-    <tr>
-        <td>Frank</td>
-        <td>Pabodie</td>
-    </tr>
-    <tr>
-        <td>Anderson</td>
-        <td>Lake</td>
-    </tr>
-    <tr>
-        <td>Valentina</td>
-        <td>Roerich</td>
-    </tr>
-    <tr>
-        <td>Frank</td>
-        <td>Danforth</td>
-    </tr>
+  <tr><th>author_id</th> <th>family</th> <th>personal</th> <th>occupation</th> <th>birth</th> <th>death</th></tr>
+<TR><TD>1</TD>
+<TD>Kline</TD>
+<TD>Kevin E.</TD>
+<TD bgcolor="red"></TD>
+<TD>1966</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>2</TD>
+<TD>Kline</TD>
+<TD>Daniel</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>3</TD>
+<TD>Hunt</TD>
+<TD>Brand</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>4</TD>
+<TD>Taylor</TD>
+<TD>Allen G.</TD>
+<TD bgcolor="red"></TD>
+<TD>1945</TD>
+<TD bgcolor="red"></TD>
+</TR>
+<TR><TD>5</TD>
+<TD>McLaughlin</TD>
+<TD>Brett</TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+<TD bgcolor="red"></TD>
+</TR>
 </table>
 				</section>
 
